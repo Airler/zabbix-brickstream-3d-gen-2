@@ -10,8 +10,8 @@ zabbix_export:
       template: 'Brickstream 3D Gen 2'
       name: 'Brickstream 3D Gen 2'
       vendor:
-          name: Airler
-          version: 6.4-0      
+        name: Airler
+        version: 6.4-0
       groups:
         - name: 'Templates/IP Cameras'
         - name: Templates/Sensors
@@ -94,6 +94,26 @@ zabbix_export:
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
               priority: WARNING
               manual_close: 'YES'
+        - uuid: b7b3684d045141f5a1961a59ef4bebfd
+          name: 'Last data update retrieved'
+          type: DEPENDENT
+          key: brickstream.data_updated
+          delay: '0'
+          trends: '0'
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - 'return Date.now();'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: 6e2559a3bd6c43a49c17bfa70e37f42b
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.data_updated,#5)<>0'
+              name: 'No HTTP data collection'
+              priority: AVERAGE
+              tags:
+                - tag: scope
+                  value: availability
         - uuid: 2baf2bd6a28346caa4b2e8d22cd7de8f
           name: 'Software version'
           type: DEPENDENT
@@ -336,14 +356,6 @@ zabbix_export:
           tags:
             - tag: component
               value: raw
-          triggers:
-            - uuid: 6e2559a3bd6c43a49c17bfa70e37f42b
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.raw.deviceSettings,#5)<>0'
-              name: 'No HTTP data collection'
-              priority: AVERAGE
-              tags:
-                - tag: scope
-                  value: availability
       tags:
         - tag: class
           value: 'ip camera'
@@ -355,4 +367,3 @@ zabbix_export:
         - macro: '{$BRICKSTREAM_HTTP_PASS}'
           type: SECRET_TEXT
         - macro: '{$BRICKSTREAM_HTTP_USER}'
-          value: ''
