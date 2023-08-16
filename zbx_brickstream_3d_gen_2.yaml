@@ -1,0 +1,358 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 2100563158bb426ca1580b81f96c4949
+      name: 'Templates/IP Cameras'
+    - uuid: b0ca7395031841debcfc293cb2521e46
+      name: Templates/Sensors
+  templates:
+    - uuid: da2ae42d58344e65bdcb81a7f7f94b0e
+      template: 'Brickstream 3D Gen 2'
+      name: 'Brickstream 3D Gen 2'
+      vendor:
+          name: Airler
+          version: 6.4-0      
+      groups:
+        - name: 'Templates/IP Cameras'
+        - name: Templates/Sensors
+      items:
+        - uuid: ec2117b245814c48b6032a1d2b523569
+          name: 'Zone name'
+          type: DEPENDENT
+          key: brickstream.allZones.zones.name
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[5].allZones.zones[0].name'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: 2f783bdae7e6490499f8eab8b7412314
+          name: Height
+          type: DEPENDENT
+          key: brickstream.calibration.height
+          delay: '0'
+          trends: '0'
+          units: cm
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[4].calibration.height'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: 4d2334c524e74929b48ec2932c4a021f
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.height,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.height,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.height))>0'
+              recovery_mode: NONE
+              name: 'Calibration: Height has changed'
+              opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: 4f92daebba54464aa3e060fb38d94719
+          name: 'X Rotation'
+          type: DEPENDENT
+          key: brickstream.calibration.xRotation
+          delay: '0'
+          trends: '0'
+          value_type: FLOAT
+          units: °
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[4].calibration.xRotation'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: b2ac229a643d4ac797ce321c0b1b287c
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation))>0'
+              recovery_mode: NONE
+              name: 'Calibration: X Rotation has changed'
+              opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: c3a4aba96fb445f9bf7272a3c3a32821
+          name: 'Y Rotation'
+          type: DEPENDENT
+          key: brickstream.calibration.yRotation
+          delay: '0'
+          trends: '0'
+          value_type: FLOAT
+          units: °
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[4].calibration.yRotation'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: b58e557671ce4a2fac1613b15b1811ef
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation))>0'
+              recovery_mode: NONE
+              name: 'Calibration: Y Rotation has changed'
+              opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: 2baf2bd6a28346caa4b2e8d22cd7de8f
+          name: 'Software version'
+          type: DEPENDENT
+          key: brickstream.identification.appRelease
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: SOFTWARE
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.appRelease'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: d40c943d7ea8414b898fb052441a5d8b
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.identification.appRelease,#1) <> last(/Brickstream 3D Gen 2/brickstream.identification.appRelease,#2) and length(last(/Brickstream 3D Gen 2/brickstream.identification.appRelease))>0'
+              recovery_mode: NONE
+              name: 'Firmware has changed'
+              opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 460414eae4d4455a88e8191eb665fbc6
+          name: 'Hardware release'
+          type: DEPENDENT
+          key: brickstream.identification.hardwareRelease
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: HARDWARE
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.hardwareRelease'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: 5aae2dc3a3834e3199bfbdd410df39c4
+          name: 'MAC address'
+          type: DEPENDENT
+          key: brickstream.identification.mac
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: MACADDRESS_A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.MAC'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: 254a51fbcc454abb9eabdf473178f1c1
+          name: 'Model number'
+          type: DEPENDENT
+          key: brickstream.identification.model
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: MODEL
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.model'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: 37a52dc88392480f82a795ec48ff513c
+          name: 'Model family'
+          type: DEPENDENT
+          key: brickstream.identification.modelFamily
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.modelFamily'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: c140f8b472354386a4b7dd0c832a7fd7
+          name: 'Part number'
+          type: DEPENDENT
+          key: brickstream.identification.partNumber
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.partNumber'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: 2333b9cd0d2b4225baa9e99726723417
+          name: 'Serial number'
+          type: DEPENDENT
+          key: brickstream.identification.serial
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: SERIALNO_A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.serialNumber'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          triggers:
+            - uuid: ddf8e941008746398e6115710b0b059c
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.identification.serial,#1) <> last(/Brickstream 3D Gen 2/brickstream.identification.serial,#2) and length(last(/Brickstream 3D Gen 2/brickstream.identification.serial))>0'
+              recovery_mode: NONE
+              name: 'Device has been replaced'
+              opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 287b711702ad46fb85e32db657322a84
+          name: 'WiFi MAC address'
+          type: DEPENDENT
+          key: brickstream.identification.wifiMAC
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: MACADDRESS_B
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.wifiMAC'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: 15ca1eaeabef4d76ac815252f51080ba
+          name: 'Wireless state'
+          type: DEPENDENT
+          key: brickstream.identification.wirelessState
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[0].identification.wirelessState'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: af2cc5562509461b9ec2af952a2ca182
+          name: 'Default gateway'
+          type: DEPENDENT
+          key: brickstream.ipinfo.defaultGateway
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: HOST_ROUTER
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[2].ipinfo.defaultGateway'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: efee42156fb64a929062f9c5a6185bce
+          name: Hostname
+          type: DEPENDENT
+          key: brickstream.ipinfo.hostName
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: NAME
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[2].ipinfo.hostName'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: c1c18a2187054f75b7bd459476ee99b8
+          name: 'Network mask'
+          type: DEPENDENT
+          key: brickstream.ipinfo.networkMask
+          delay: '0'
+          trends: '0'
+          value_type: CHAR
+          inventory_link: HOST_NETMASK
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[2].ipinfo.networkMask'
+          master_item:
+            key: brickstream.raw.deviceSettings
+          tags:
+            - tag: component
+              value: network
+        - uuid: fbb751191810471eb78aa251722c0e0c
+          name: 'Licensed count zones'
+          type: DEPENDENT
+          key: brickstream.licenseInfo.countZones
+          delay: '0'
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$.overview[3].licenseInfo.countZones'
+          master_item:
+            key: brickstream.raw.deviceSettings
+        - uuid: 1083a15f2db242648100186f160c385c
+          name: 'Brickstream Raw Diagnostics Data'
+          type: HTTP_AGENT
+          key: brickstream.raw
+          delay: 5m
+          history: '0'
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          authtype: BASIC
+          username: '{$BRICKSTREAM_HTTP_USER}'
+          password: '{$BRICKSTREAM_HTTP_PASS}'
+          url: 'http://{HOST.CONN}/restapi/diagnostics/GetCamOverview'
+          tags:
+            - tag: component
+              value: raw
+        - uuid: 5517f5a69fcc427c897db8fc521bf67e
+          name: 'Brickstream Raw Device Settings Data'
+          type: HTTP_AGENT
+          key: brickstream.raw.deviceSettings
+          delay: 5m
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          authtype: BASIC
+          username: '{$BRICKSTREAM_HTTP_USER}'
+          password: '{$BRICKSTREAM_HTTP_PASS}'
+          url: 'http://{HOST.CONN}/restapi/deviceSettings/GetOverview'
+          tags:
+            - tag: component
+              value: raw
+          triggers:
+            - uuid: 6e2559a3bd6c43a49c17bfa70e37f42b
+              expression: 'last(/Brickstream 3D Gen 2/brickstream.raw.deviceSettings,#5)<>0'
+              name: 'No HTTP data collection'
+              priority: AVERAGE
+              tags:
+                - tag: scope
+                  value: availability
+      tags:
+        - tag: class
+          value: 'ip camera'
+        - tag: class
+          value: sensor
+        - tag: target
+          value: brickstream
+      macros:
+        - macro: '{$BRICKSTREAM_HTTP_PASS}'
+          type: SECRET_TEXT
+        - macro: '{$BRICKSTREAM_HTTP_USER}'
+          value: ''
