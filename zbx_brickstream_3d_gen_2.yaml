@@ -108,7 +108,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: 6e2559a3bd6c43a49c17bfa70e37f42b
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.data_updated,#5)<>0'
+              expression: 'nodata(/Brickstream 3D Gen 2/brickstream.data_updated,6m)=1'
               name: 'No HTTP data collection'
               priority: AVERAGE
               tags:
