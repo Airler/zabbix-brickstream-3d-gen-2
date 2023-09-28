@@ -44,7 +44,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: 4d2334c524e74929b48ec2932c4a021f
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.height,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.height,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.height))>0'
+              expression: 'change(/Brickstream 3D Gen 2/brickstream.calibration.height) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.height))>0'
               recovery_mode: NONE
               name: 'Calibration: Height has changed'
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
@@ -66,7 +66,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: b2ac229a643d4ac797ce321c0b1b287c
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation))>0'
+              expression: 'change(/Brickstream 3D Gen 2/brickstream.calibration.xRotation) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.xRotation))>0'
               recovery_mode: NONE
               name: 'Calibration: X Rotation has changed'
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
@@ -88,7 +88,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: b58e557671ce4a2fac1613b15b1811ef
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation,#1) <> last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation,#2) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation))>0'
+              expression: 'change(/Brickstream 3D Gen 2/brickstream.calibration.yRotation) and length(last(/Brickstream 3D Gen 2/brickstream.calibration.yRotation))>0'
               recovery_mode: NONE
               name: 'Calibration: Y Rotation has changed'
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
@@ -108,7 +108,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: 6e2559a3bd6c43a49c17bfa70e37f42b
-              expression: 'nodata(/Brickstream 3D Gen 2/brickstream.data_updated,6m)=1 or monoinc(/Brickstream 3D Gen 2/brickstream.data_updated,#3,"strict")=0'
+              expression: 'nodata(/Brickstream 3D Gen 2/brickstream.data_updated,10m)=1 or monoinc(/Brickstream 3D Gen 2/brickstream.data_updated,#3,"strict")=0'
               name: 'No HTTP data collection'
               priority: AVERAGE
               tags:
@@ -130,7 +130,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: d40c943d7ea8414b898fb052441a5d8b
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.identification.appRelease,#1) <> last(/Brickstream 3D Gen 2/brickstream.identification.appRelease,#2) and length(last(/Brickstream 3D Gen 2/brickstream.identification.appRelease))>0'
+              expression: 'change(/Brickstream 3D Gen 2/brickstream.identification.appRelease) and length(last(/Brickstream 3D Gen 2/brickstream.identification.appRelease))>0'
               recovery_mode: NONE
               name: 'Firmware has changed'
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
@@ -223,7 +223,7 @@ zabbix_export:
             key: brickstream.raw.deviceSettings
           triggers:
             - uuid: ddf8e941008746398e6115710b0b059c
-              expression: 'last(/Brickstream 3D Gen 2/brickstream.identification.serial,#1) <> last(/Brickstream 3D Gen 2/brickstream.identification.serial,#2) and length(last(/Brickstream 3D Gen 2/brickstream.identification.serial))>0'
+              expression: 'change(/Brickstream 3D Gen 2/brickstream.identification.serial) and length(last(/Brickstream 3D Gen 2/brickstream.identification.serial))>0'
               recovery_mode: NONE
               name: 'Device has been replaced'
               opdata: 'previous: {ITEM.VALUE1}, current: {ITEM.LASTVALUE}'
